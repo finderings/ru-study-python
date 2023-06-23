@@ -18,16 +18,17 @@ class ListExercise:
 
     @staticmethod
     def search(input_list: list[int], query: int) -> int:
+        def recur_search(low, high):
+            if low > high:
+                return -1
 
-        low = 0
-        high = len(input_list) - 1
-
-        while low <= high:
             mid = (low + high) // 2
+
             if input_list[mid] == query:
                 return mid
-            if input_list[mid] > query:
-                high = mid - 1
+            elif input_list[mid] > query:
+                return recur_search(low, mid - 1)
             else:
-                low = mid + 1
-        return -1
+                return recur_search(mid + 1, high)
+
+        return recur_search(0, len(input_list) - 1)
