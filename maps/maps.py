@@ -4,28 +4,31 @@ from typing import Union
 class MapExercise:
     @staticmethod
     def rating(list_of_movies: list[dict]) -> float:
-        """
-        !!Задание нужно решить используя map!!
-        Посчитать средний рейтинг фильмов (rating_kinopoisk) у которых две или больше стран.
-        Фильмы у которых рейтинг не задан или равен 0 не учитывать в расчете среднего.
+        def necessary_rating(x: dict) -> float:
+            rating = x.get("rating_kinopoisk")
+            if rating and rating != "0" and len(x.get("country", "").split(",")) >= 2:
+                return float(rating)
+            return 0.0
 
-        :param list_of_movies: Список фильмов.
-        Ключи словаря: name, rating_kinopoisk, rating_imdb, genres, year, access_level, country
-        :return: Средний рейтинг фильмов у которых две или больше стран
-        """
-        pass
+        apply_rating = map(necessary_rating, list_of_movies)
+
+        valid_rating = list(filter(lambda y: y != 0.0, apply_rating))
+        if valid_rating:
+            average_rating = sum(valid_rating) / len(valid_rating)
+            return average_rating
+        else:
+            return 0.0
 
     @staticmethod
     def chars_count(list_of_movies: list[dict], rating: Union[float, int]) -> int:
-        """
-        !!Задание нужно решить используя map!!
-        Посчитать количество букв 'и' в названиях всех фильмов с рейтингом (rating_kinopoisk) больше
-        или равным заданному значению
+        def necessary_rating(x: dict) -> dict:
+            rate = x.get("rating_kinopoisk")
+            if rate and float(rate) >= float(rating):
+                return x
+            return {}
 
-        :param list_of_movies: Список фильмов
-        Ключи словаря: name, rating_kinopoisk, rating_imdb, genres, year, access_level, country
-        :param rating: Заданный рейтинг
-        :return: Количество букв 'и' в названиях всех фильмов с рейтингом больше
-        или равным заданному значению
-        """
-        pass
+        filtered_movies = list(map(necessary_rating, list_of_movies))
+
+        titles = [movie.get("name", "") for movie in filtered_movies]
+        count = sum(title.count("и") for title in titles)
+        return count
