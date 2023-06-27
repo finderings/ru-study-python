@@ -29,6 +29,6 @@ class MapExercise:
 
         filtered_movies = list(map(necessary_rating, list_of_movies))
 
-        titles = [movie.get("name", "") for movie in filtered_movies]
-        count = sum(title.count("и") for title in titles)
+        titles = list(map(lambda movie: movie.get("name", ""), filtered_movies))
+        count = sum(map(lambda title: title.count("и"), titles))
         return count
