@@ -6,7 +6,7 @@ class MapExercise:
     def rating(list_of_movies: list[dict]) -> float:
         def necessary_rating(x: dict) -> float:
             rating = x.get("rating_kinopoisk")
-            if rating and rating != "0" and len(x.get("country", "").split(",")) >= 2:
+            if rating and rating != "0" and (x.get("country", "").count(",") + 1) >= 2:
                 return float(rating)
             return 0.0
 
