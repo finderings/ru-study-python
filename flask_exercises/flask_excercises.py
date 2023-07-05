@@ -24,16 +24,14 @@ class FlaskExercise:
                 else:
                     error = {"errors": {"name": "This field is required"}}
                     return error, 422
-            else:
-                return wrong_content_type()
+            return wrong_content_type()
 
         @app.route("/user/<name>", methods=["GET"])
         def user_name(name):
             if "name" in users_data:
                 getted_name = {"data": f"My name is {users_data['name']}"}
                 return getted_name, 200
-            else:
-                return not_found()
+            return not_found()
 
         @app.route("/user/<name>", methods=["PATCH"])
         def update_user(name):
@@ -44,15 +42,12 @@ class FlaskExercise:
                     users_data.update(user)
                     updated_user = {"data": f"My name is {user['name']}"}
                     return updated_user, 200
-                else:
-                    return not_found()
-            else:
-                return wrong_content_type()
+                return not_found()
+            return wrong_content_type()
 
         @app.route("/user/<name>", methods=["DELETE"])
         def delete_user(name):
             if "name" in users_data:
                 del users_data["name"]
                 return "", 204
-            else:
-                return not_found()
+            return not_found()
