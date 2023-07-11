@@ -15,16 +15,16 @@ class FlaskExercise:
         @app.route("/user", methods=["POST"])
         def user_create():
             content_type = request.headers.get("Content-Type")
-            if content_type == "application/json":
-                user = request.json
-                if "name" in user:
-                    users_data.update(user)
-                    new_user = {"data": f"User {user['name']} is created!"}
-                    return new_user, 201
-                else:
-                    error = {"errors": {"name": "This field is required"}}
-                    return error, 422
-            return wrong_content_type()
+            if content_type != "application/json":
+                return wrong_content_type()
+            user = request.json
+            if "name" not in user:
+                error = {"errors": {"name": "This field is required"}}
+                return error, 422
+            else:
+                users_data.update(user)
+                new_user = {"data": f"User {user['name']} is created!"}
+                return new_user, 201
 
         @app.route("/user/<name>", methods=["GET"])
         def user_name(name):
@@ -36,14 +36,15 @@ class FlaskExercise:
         @app.route("/user/<name>", methods=["PATCH"])
         def update_user(name):
             content_type = request.headers.get("Content-Type")
-            if content_type == "application/json":
-                user = request.json
-                if "name" in users_data:
-                    users_data.update(user)
-                    updated_user = {"data": f"My name is {user['name']}"}
-                    return updated_user, 200
+            if content_type != "application/json":
+                return wrong_content_type()
+            if "name" not in users_data:
                 return not_found()
-            return wrong_content_type()
+            else:
+                user = request.json
+                users_data.update(user)
+                updated_user = {"data": f"My name is {user['name']}"}
+                return updated_user, 200
 
         @app.route("/user/<name>", methods=["DELETE"])
         def delete_user(name):
