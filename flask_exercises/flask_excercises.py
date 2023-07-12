@@ -21,17 +21,16 @@ class FlaskExercise:
             if "name" not in user:
                 error = {"errors": {"name": "This field is required"}}
                 return error, 422
-            else:
-                users_data.update(user)
-                new_user = {"data": f"User {user['name']} is created!"}
-                return new_user, 201
+            users_data.update(user)
+            new_user = {"data": f"User {user['name']} is created!"}
+            return new_user, 201
 
         @app.route("/user/<name>", methods=["GET"])
         def user_name(name):
-            if "name" in users_data:
-                getted_name = {"data": f"My name is {users_data['name']}"}
-                return getted_name, 200
-            return not_found()
+            if "name" not in users_data:
+                return not_found()
+            getted_name = {"data": f"My name is {users_data['name']}"}
+            return getted_name, 200
 
         @app.route("/user/<name>", methods=["PATCH"])
         def update_user(name):
@@ -40,15 +39,14 @@ class FlaskExercise:
                 return wrong_content_type()
             if "name" not in users_data:
                 return not_found()
-            else:
-                user = request.json
-                users_data.update(user)
-                updated_user = {"data": f"My name is {user['name']}"}
-                return updated_user, 200
+            user = request.json
+            users_data.update(user)
+            updated_user = {"data": f"My name is {user['name']}"}
+            return updated_user, 200
 
         @app.route("/user/<name>", methods=["DELETE"])
         def delete_user(name):
-            if "name" in users_data:
-                del users_data["name"]
-                return "", 204
-            return not_found()
+            if "name" not in users_data:
+                return not_found()
+            del users_data["name"]
+            return "", 204
